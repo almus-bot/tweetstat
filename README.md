@@ -1,2 +1,2 @@
 # tweetstat
-tweetstat is an R package to extract basic information from twitter users and sentiment analysis.
+tweetstat is a packages the R for summary tweets 
