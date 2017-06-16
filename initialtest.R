@@ -1,6 +1,5 @@
 # Paquetes para extraer info de twitter y textos
 library(rtweet)
-library(twitteR)
 library(RCurl)
 library(RJSONIO)
 library(stringr)
@@ -31,17 +30,43 @@ twitter_token <- create_token(app = appname, consumer_key = key, consumer_secret
 tw1 <- search_tweets("ciencia de datos", n=10, token = twitter_token)
 tw2 <- search_tweets("ciencia de datos -filter:retweets", n=10, token = twitter_token)
 
-# Obteniendo tweets de un usuario particular (timeline)
 user <- "genbeta"  # coloque aquí el usuario que quiera analizar
-tweets <- get_timeline(user, n=10)
-tweets1 <- get_timeline(user, n=10, include_rts = FALSE) # sin retweets
+# Obteniendo tweets de un usuario particular (timeline)
 
-user_info <- users_data(tweets)[1,] # Extrayendo datos del usuario
+resume <- function(user, rt=FALSE){
+  
+  if (rt == TRUE){
+    tw <- get_timeline(user, n=10)
+    ## Cuantos son retweets?
+    num_rtw <- sum(tw$is_retweet)
+    
+  }else{
+    tw <- get_timeline(user, n=10, include_rts = FALSE) # sin retweets
+    num_rtw <- 'No aplica'
+  }
+  
+  # Mentions (a quién y cuantos)
+  mentions <- na.omit(tw$mentions_screen_name)
+  corp_ment <- processcorpus(mentions)
+  num_mention <- dim(corp_ment)[1]
+  
+  # Last tweet 
+  last_tweet <- tw$text[1]
+  is_rtweet <- tw$is_retweet[1]
+  
+  user_info <- users_data(tw[1,])[1,]# Extrayendo datos del usuario
+  
+  # Reduciendo el data frame con datos considerados para twitterstat
+  user_info <- user_info[,c("name","screen_name", "location","description","protected",
+                                    "followers_count","friends_count", "created_at","favourites_count",
+                                    "time_zone","verified","statuses_count", "lang", "profile_image_url")]
 
-# Reduciendo el data frame con datos considerados para twitterstat
-user_info_compact <- user_info[,c("name","screen_name", "location","description","protected",
-                                  "followers_count","friends_count", "favourites_count","time_zone",
-                                  "verified","statuses_count", "profile_background_image_url_https")]
+  user_info <- data.frame(user_info,num_rtw, num_mention,last_tweet, is_rtweet)  
+  
+  }
+
+# Ejemplo de uso
+datos <- resume("mariangely_s", TRUE)
 
 # Esta función limpia el texto de los tweets para obtener palabras frecuentes.
 cleantext <- function(s, only_words = TRUE){
@@ -53,7 +78,7 @@ cleantext <- function(s, only_words = TRUE){
     chat_text = gsub('#\\S+', '', chat_text) ## Elimina Hashtags
     chat_text <- gsub("[[:cntrl:]]", " ", chat_text)  # ELimina caracteres de control
   
-  if only_words == TRUE {
+  if (only_words == TRUE) {
     chat_text <- gsub("[[:digit:]]", " ", chat_text)  # Elimina números/dígitos
     chat_text <- gsub("[[:punct:]]", " ", chat_text)  # Elimina caracteres de puntuación ortográfica
     chat_text <- tolower(chat_text)  # Convierte todo el texto a minúsculas
@@ -65,6 +90,7 @@ cleantext <- function(s, only_words = TRUE){
     }
     chat_text <- stripWhitespace(chat_text)  # Elimina espacios en blanco sobrantes
 }  
+
 
 # Funcion para generar el Corpus necesario para obtener los términos y las frecuencias.
 processcorpus <- function(text){
@@ -111,3 +137,47 @@ g2 <- ggplot(corp1[1:10,],aes(word, freq))+
 
 require(gridExtra)
 grid.arrange(g1,g2, nrow=2)
+
+# prueba de wordcloud
+cloud <- function(corpus){
+
+  wordcloud(words = corpus[,1], freq= corpus[,2], min.freq = 2, scale=c(2,.4),
+          max.words = 100, random.order = FALSE, rot.per = 0.4,
+          colors = brewer.pal(8, "Dark2")) 
+
+}
+
+## SENTIMENT ANALYSIS TEST
+# USando la api de indicoio
+
+source("https://bioconductor.org/biocLite.R")
+biocLite("EBImage")
+
+library(devtools)
+install_github("IndicoDataSolutions/IndicoIo-R")
+
+library(indicoio)
+
+# single example
+sentiment(
+  "I love writing code!",
+  api_key = '7d9bb1d258a407b35a7a40787b625912'
+)
+
+# batch example
+sentiment(
+  c(
+    "I love writing code!",
+    "Alexander and the Terrible, Horrible, No Good, Very Bad Day"
+  ),
+  api_key = '7d9bb1d258a407b35a7a40787b625912'
+)
+
+
+
+sentiment(
+  "Amo escribir código!",
+  api_key = '7d9bb1d258a407b35a7a40787b625912', language = "es"
+)
+
+
