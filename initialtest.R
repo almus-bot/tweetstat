@@ -104,10 +104,14 @@ processcorpus <- function(text){
 
 # Procesandos los tweets con retweets incluidos
 text <- cleantext(tweets$text)
+tw <- get_timeline(user, n=10)
+text <- cleantext(tw$text)
 corp <- processcorpus(text)
 
 # Procesandos los tweets sin retweets incluidos
 text1<- cleantext(tweets1$text)
+tw1 <- get_timeline(user, n=10, include_rts= FALSE)
+text1<- cleantext(tw1$text)
 corp1 <- processcorpus(text1)
 
 # Preparando el área para graficar
@@ -178,6 +182,41 @@ sentiment(
 sentiment(
   "Amo escribir código!",
   api_key = '7d9bb1d258a407b35a7a40787b625912', language = "es"
+)
+
+# Prueba: sentiment analysis
+# Limpiando los tweets: oraciones completas
+tuits <- cleantext(tw$text, only_words = FALSE)
+
+'7d9bb1d258a407b35a7a40787b625912'
+# Aplicando sentiment analysis a todas las oraciones (key personal de la api)
+key_indicoio <- '7d9bb1d258a407b35a7a40787b625912'
+sent_analysis <- sentiment(tuits,  api_key = key_indicoio, language = "es")
+
+# Deshaciendo la lista, en un vector
+sent_analysis<- unlist(sent_analysis)
+
+# Graficando la evolución del sentiment durante el tiempo
+plot(tw$created_at, sent_analysis, type = "l")    # tw$created_at es la fecha de publicación de cada tweet.
+
+
+keywords(
+  "Some call it the sunshine state",
+  api_key = '7d9bb1d258a407b35a7a40787b625912',
+  version = 2
+)
+
+key_w <- keywords(
+  tuits,
+  api_key = '7d9bb1d258a407b35a7a40787b625912',
+  version = 2
+)
+
+# Para el topic de los tweets /sólo para inglés
+
+topics <- text_tags(
+  tuits,
+  api_key = '7d9bb1d258a407b35a7a40787b625912'
 )
 
 
