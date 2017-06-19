@@ -1,4 +1,11 @@
-
+#' A summary function for twitter's accounts
+#'
+#' This function process user data and tweets to return a set of relevant information about it.
+#' @param user Character string with twitter user username.
+#' @param rt TRUE if you want retrive tweets including retweets.FALSE if not (default).
+#' @export
+#' @examples
+#' resume("genbeta")
 
 resume <- function(user, rt=FALSE){
   
@@ -30,6 +37,5 @@ resume <- function(user, rt=FALSE){
   
   user_info <- data.frame(user_info,num_rtw, num_mention,last_tweet, is_rtweet)  
 
-  
 }
 

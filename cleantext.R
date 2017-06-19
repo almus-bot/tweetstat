@@ -1,3 +1,14 @@
+#' A Function for clean texts
+#'
+#' This function allows you to get single words from texts, or get 
+#' complete sentences from tweets, without urls and non necessary symbols
+#' @param s Vector containing strings to clean.
+#' @param only_words If TRUE, return only single words from cleaned text (default). If FALSE, return complete
+#' sentences.
+#' @export
+#' @examples
+#' cleantext(string)
+
 cleantext <- function(s, only_words = TRUE){
   
   chat_text <- gsub('\\p{So}|\\p{Cn}', '', s, perl = TRUE)

@@ -1,4 +1,17 @@
-view_words <- function(words1, words2=NULL, compare=FALSE, type){
+#' Plot generator for tweetstat
+#'
+#' This function takes words and its frequencies to generate wordclouds or histograms.
+#' Comparing two sets of words it's available.
+#' @param words1 dataframe with set of words in its first column, set of frequencies in its second column.
+#' @param words2 Optional: dataframe with same structure of 'words1', used when 'compare"==TRUE. Default = NULL.
+#' @param compare TRUE when you want to compare two sets of words. FALSE will generate only one plot. Default = FALSE.
+#' @param type Use "cloud" to generate wordcloud, or "hist" for histograms. Default = "cloud".
+#' @export
+#' @examples
+#' view_words(words, other_set, compare = TRUE, type = "cloud")
+
+
+view_words <- function(words1, words2=NULL, compare=FALSE, type="cloud"){
   
   if (type=="cloud") {
   
