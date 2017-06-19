@@ -26,6 +26,7 @@ token_secret <- ""
 twitter_token <- create_token(app = appname, consumer_key = key, consumer_secret = secret )
 ## NOTA: Se abrirá la pagina de twitter para confirmar la autorización ##
 
+
 # Prueba: buscando tweets (con retweets/sin retweets) con paquete rtweet
 tw1 <- search_tweets("ciencia de datos", n=10, token = twitter_token)
 tw2 <- search_tweets("ciencia de datos -filter:retweets", n=10, token = twitter_token)
@@ -91,28 +92,27 @@ cleantext <- function(s, only_words = TRUE){
     chat_text <- stripWhitespace(chat_text)  # Elimina espacios en blanco sobrantes
 }  
 
-
 # Funcion para generar el Corpus necesario para obtener los términos y las frecuencias.
-processcorpus <- function(text){
+makecorpus <- function(text){
     Encoding(text) <- "UTF-8"   # Asegura la codificación utf8
     corp <- Corpus(DataframeSource(data.frame(text))) # Genera el corpus desde el texto plano
     tdm <- TermDocumentMatrix(corp)  # Genera la lista de palabras con frecuencias
     text.m <- as.matrix(tdm)
     text.v <- sort(rowSums(text.m),decreasing=TRUE)  # Ordena la lista según la frecuencia
-    text.d <- data.frame(word = names(text.v),freq=text.v) # Converte en data frame para mejor manejo
+    text.d <- data.frame(word = names(text.v),freq=text.v) # Convierte en data frame para mejor manejo
 } 
 
 # Procesandos los tweets con retweets incluidos
 text <- cleantext(tweets$text)
 tw <- get_timeline(user, n=10)
 text <- cleantext(tw$text)
-corp <- processcorpus(text)
+corp <- makecorpus(text)
 
 # Procesandos los tweets sin retweets incluidos
 text1<- cleantext(tweets1$text)
 tw1 <- get_timeline(user, n=10, include_rts= FALSE)
 text1<- cleantext(tw1$text)
-corp1 <- processcorpus(text1)
+corp1 <- makecorpus(text1)
 
 # Preparando el área para graficar
 layout(matrix(c(1,2,3,4), nrow=2), heights=c(1, 4, 1, 4))
