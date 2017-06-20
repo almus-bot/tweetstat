@@ -7,7 +7,7 @@ library(stringr)
 # Funciones para procesar texto/nube de palabras
 library(tm)
 library(wordcloud)
-library(SnowballC)
+#library(SnowballC)
 library(ggplot2)
 
 # Datos de la App de prueba de twitter

@@ -10,12 +10,12 @@
 resume <- function(user, rt=FALSE){
   
   if (rt == TRUE){
-    tw <- get_timeline(user, n=10)
+    tw <- rtweet::get_timeline(user, n=100)
     ## Cuantos son retweets?
     num_rtw <- sum(tw$is_retweet)
     
   }else{
-    tw <- get_timeline(user, n=10, include_rts = FALSE) # sin retweets
+    tw <- rtweet::get_timeline(user, n=100, include_rts = FALSE) # sin retweets
     num_rtw <- 'No aplica'
   }
   

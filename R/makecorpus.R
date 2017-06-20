@@ -9,8 +9,8 @@
 
 makecorpus <- function(text){
   Encoding(text) <- "UTF-8"   # Ensure utf8 encoding
-  corp <- Corpus(DataframeSource(data.frame(text))) # create corpus from plain text
-  tdm <- TermDocumentMatrix(corp)  # Generate words list with its frequencies.
+  corp <- tm::Corpus(tm::DataframeSource(data.frame(text))) # create corpus from plain text
+  tdm <- tm::TermDocumentMatrix(corp)  # Generate words list with its frequencies.
   text.m <- as.matrix(tdm)
   text.v <- sort(rowSums(text.m),decreasing=TRUE)  # sort list of words by frequencies.
   text.d <- data.frame(word = names(text.v),freq=text.v) # convert to dataframe 

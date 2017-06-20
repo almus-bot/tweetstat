@@ -22,11 +22,11 @@ cleantext <- function(s, only_words = TRUE){
     chat_text <- gsub("[[:digit:]]", " ", chat_text)  # Elimina números/dígitos
     chat_text <- gsub("[[:punct:]]", " ", chat_text)  # Elimina caracteres de puntuación ortográfica
     chat_text <- tolower(chat_text)  # Convierte todo el texto a minúsculas
-    chat_text <- removeWords(chat_text, words = stopwords("spanish"))  # Elimina conectores y demás palabras sin relevancia 
-    chat_text <- removeWords(chat_text, words = stopwords("english"))  # Elimina conectores y demás palabras sin relevancia (en inglés)
+    chat_text <- tm::removeWords(chat_text, words = stopwords("spanish"))  # Elimina conectores y demás palabras sin relevancia 
+    chat_text <- tm::removeWords(chat_text, words = stopwords("english"))  # Elimina conectores y demás palabras sin relevancia (en inglés)
     # Elimina palabras adicionales (Éstas palabras hay que cambiarlas a conveniencia)
-    chat_text <- removeWords(chat_text, words = c("usted", "pues", "tal", "tan", "asi", "mas","dijo", "como", "dije" , "digo",
+    chat_text <- tm::removeWords(chat_text, words = c("usted", "pues", "tal", "tan", "asi", "mas","dijo", "como", "dije" , "digo",
                                                   "entonces", "aunque", "ahi", "aqui"))
   }
-  chat_text <- stripWhitespace(chat_text)  # Elimina espacios en blanco sobrantes
+  chat_text <- tm::stripWhitespace(chat_text)  # Elimina espacios en blanco sobrantes
 }  

@@ -7,7 +7,7 @@ library(stringr)
 # Funciones para procesar texto/nube de palabras
 library(tm)
 library(wordcloud)
-library(SnowballC)
+#library(SnowballC)
 library(ggplot2)
 
 # El usuario debe tener una app en twitter para el uso de rtweet
@@ -29,17 +29,18 @@ twitter_token <- create_token(app = appname, consumer_key = key, consumer_secret
 
 user <- "genbeta"  # write here a twitter username to analyse.
 
-source("resume.R")   # summary function
-source("cleantext.R") # function to get tidy words or tweets
-source("makecorpus.R") # function to process corpus from text (words and frequencies)
-source("view_words.R") # plot word cloud or histogram from text 
-source("sentiment.R") # performs sentiment analysis by indicoio, plot sentiment evolution in time.
+source("R/resume.R")   # summary function
+source("R/cleantext.R") # function to get tidy words or tweets
+source("R/makecorpus.R") # function to process corpus from text (words and frequencies)
+source("R/view_words.R") # plot word cloud or histogram from text 
+source("R/sentiment.R") # performs sentiment analysis by indicoio, plot sentiment evolution in time.
 
 datos <- resume(user)
 cleaned_text <- cleantext(tw$text)
 cleaned_sentences <- cleantext(tw$text, only_words = FALSE)
 corpus_text <- makecorpus(cleaned_text)
 view_words(corpus_text, type="cloud")
+view_words(corpus_text, type="hist")
 
 api_key = '7d9bb1d258a407b35a7a40787b625912'
 sentimentplot(tw$text, tw$created_at, api_key, "es")

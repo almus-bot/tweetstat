@@ -1,0 +1,18 @@
+Package: tweetstat
+Title: Summary For Tweets
+Version: 0.1
+Date: 2017-06-20
+Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
+Description: tweetstat is an R package to resume tweet's info and perform sentiment analysis. Uses
+    rtweet packages and indicoio api.
+Depends: R (>= 3.4.0)
+Imports:
+    tm,
+    rtweet,
+    ggplot2,
+    wordcloud
+License: BSD 3-Clause License
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1.9000
+URL: 
